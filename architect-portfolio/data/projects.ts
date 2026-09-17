@@ -15,7 +15,8 @@ export const projects = [
   "/p117.jpg",
 ],
     floors: ["/f11.jpg","/f12.jpg"],
-    sections: ["/s11.jpg", "/s12.jpg"]
+    sections: ["/s11.jpg", "/s12.jpg"],
+    description: "A cultural hub designed to connect community and space.", // ✅ ADD THIS
   },
 
 
@@ -26,6 +27,7 @@ export const projects = [
     year: "2023",
     cover: "/p22.jpg",
     images: ["/p22.jpg"],
+    description: "A cultural hub designed to connect community and space.", // ✅ ADD THIS
   },
   {
     slug: "urban-core-tower",
@@ -34,9 +36,11 @@ export const projects = [
     year: "2024",
     cover: "/p33.jpg",
     images: ["/p33.jpg"],
+    description: "A cultural hub designed to connect community and space.", // ✅ ADD THIS
   },
   {
     slug: "desert-light-museum",
+    description: "A cultural hub designed to connect community and space.", // ✅ ADD THIS
     title: "Desert Light Museum",
     type: "Cultural",
     year: "2023",
@@ -50,6 +54,7 @@ export const projects = [
     year: "2022",
     cover: "/p55.jpg",
     images: ["/p55.jpg"],
+    description: "A cultural hub designed to connect community and space.", // ✅ ADD THIS
   },
   {
     slug: "minimal-housing-block",
@@ -58,5 +63,6 @@ export const projects = [
     year: "2022",
     cover: "/p66.jpg",
     images: ["/p66.jpg"],
+    description: "A cultural hub designed to connect community and space.", // ✅ ADD THIS
   },
 ];

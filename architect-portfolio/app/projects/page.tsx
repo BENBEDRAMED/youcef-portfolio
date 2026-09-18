@@ -1,12 +1,14 @@
-"use client";
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Projects";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import ProjectHero from "@/components/Projects";
 
 export default function ProjectsPage() {
-    return (
+  return (
     <main className="w-full">
       <Navbar />
-      <Hero />
-    </main>)
+      <ProjectHero
+      
+      />
+      {/* Your projects grid / list will go here */}
+    </main>
+  );
 }

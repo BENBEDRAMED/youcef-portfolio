@@ -7,6 +7,16 @@ import ProjectConcept from "@/components/ProjectConcept";
 import ProjectPlans from "@/components/ProjectPlans";
 import ProjectSections from "@/components/ProjectSections";
 
+// Pre-render all project paths at build/start
+export async function generateStaticParams() {
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
+}
+
+// Immediately 404 unknown slugs without re-running server logic
+export const dynamicParams = false;
+
 export default async function ProjectPage({
   params,
 }: {
@@ -18,8 +28,7 @@ export default async function ProjectPage({
   if (!project) return notFound();
 
   return (
-    <main>
-
+    <main className="w-full bg-black min-h-screen">
       <Navbar />
 
       <ProjectHero
@@ -30,15 +39,14 @@ export default async function ProjectPage({
       />
 
       <ProjectConcept
-        description={project.description}
-        images={project.images}
+        description={project.description ?? ""}
+        images={project.images ?? []}
         cover={project.cover}
       />
 
-      <ProjectPlans floors={project.floors} />
+      <ProjectPlans floors={project.floors ?? []} />
 
-      <ProjectSections sections={project.sections} />
-
+      <ProjectSections sections={project.sections ?? []} />
     </main>
   );
 }

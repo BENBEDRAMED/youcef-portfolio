@@ -1,66 +1,92 @@
 "use client";
+
 import Link from "next/link";
-
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 export default function Navbar() {
+  const pathname = usePathname();
+
+  const linkStyle = (path: string) =>
+    `relative group cursor-pointer ${
+      pathname === path ? "text-white" : "text-white/70"
+    }`;
+
   return (
-    <nav className="fixed top-0 left-0 w-full h-20 bg-gradient-to-b from-black/80 to-black/0 z-50">
+    <nav className="fixed top-0 left-0 w-full h-20 bg-gradient-to-b from-black/80 to-transparent z-50 backdrop-blur-md">
 
-<div className="w-full h-full flex items-center justify-between px-8 text-white">
+      <div className="w-full h-full flex items-center justify-between px-8 text-white">
 
-  {/* 🔷 LEFT (Logo) */}
-<div className="group relative flex items-center">
+        {/* 🔷 LOGO */}
+        <Link href="/" className="group relative flex items-center">
 
-  {/* soft glow */}
-  <div className="absolute inset-0 rounded-full bg-white/10 blur-md opacity-0 transition duration-500 group-hover:opacity-100"></div>
+          {/* glow */}
+          <div className="absolute inset-0 rounded-full bg-white/10 blur-md opacity-0 transition duration-500 group-hover:opacity-100"></div>
 
-  {/* logo */}
-  <img
-    src="/logo2.png"
-    alt="logo"
-    className="relative h-16 w-auto transition duration-300 group-hover:scale-105 group-hover:-translate-y-1"
-  />
+          <Image
+            src="/logo2.png"
+            alt="logo"
+            width={64}
+            height={64}
+            priority
+            className="relative h-16 w-auto transition duration-300 group-hover:scale-105 group-hover:-translate-y-1"
+          />
 
-</div>
-  {/* 🔷 CENTER (Links) */}
-  <div className="flex gap-10 text-sm tracking-widest uppercase">
+        </Link>
 
-       <Link href="/">
-  <span className="relative group cursor-pointer">
-    Home
-    <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
-  </span>
-</Link>
+        {/* 🔷 LINKS */}
+        <div className="flex gap-10 text-sm tracking-widest uppercase">
 
-    <Link href="/projects">
-  <span className="relative group cursor-pointer">
-    Projects
-    <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
-  </span>
-</Link>
-<Link href="/about" className="relative group cursor-pointer">
-  About Me
-  <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
-</Link>
+          <Link href="/" className={`hidden md:block ${linkStyle("/")}`}>
+            Home
+            <span
+              className={`absolute left-0 -bottom-1 h-[1px] bg-white transition-all duration-300 ${
+                pathname === "/" ? "w-full" : "w-0 group-hover:w-full"
+              }`}
+            />
+          </Link>
 
-  </div>
+          <Link href="/projects" className={linkStyle("/projects")}>
+            Projects
+            <span
+              className={`absolute left-0 -bottom-1 h-[1px] bg-white transition-all duration-300 ${
+                pathname === "/projects"
+                  ? "w-full"
+                  : "w-0 group-hover:w-full"
+              }`}
+            />
+          </Link>
 
-  {/* 🔷 RIGHT (CTA Button) */}
-  <Link href="/about#contact">
-  <button className="relative px-6 py-2 border border-white text-sm tracking-widest uppercase overflow-hidden group">
-    
-    <span className="relative z-10">Contact</span>
+          <Link href="/about" className={linkStyle("/about")}>
+            About Me
+            <span
+              className={`absolute left-0 -bottom-1 h-[1px] bg-white transition-all duration-300 ${
+                pathname === "/about"
+                  ? "w-full"
+                  : "w-0 group-hover:w-full"
+              }`}
+            />
+          </Link>
 
-    <span className="absolute inset-0 bg-white scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+        </div>
 
-    <span className="absolute inset-0 flex items-center justify-center text-black opacity-0 group-hover:opacity-100 transition duration-300">
-      Contact
-    </span>
+        {/* 🔷 CTA (CONTACT → SCROLL) */}
+        <Link
+          href="/about#contact"
+          className="relative px-6 py-2 border border-white text-sm tracking-widest uppercase overflow-hidden group"
+        >
+          {/* text */}
+          <span className="relative z-10">Contact</span>
 
-  </button>
-</Link>
+          {/* animated bg */}
+          <span className="absolute inset-0 bg-white scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
 
-</div>
+          {/* hover text */}
+          <span className="absolute inset-0 flex items-center justify-center text-black opacity-0 group-hover:opacity-100 transition duration-300">
+            Contact
+          </span>
+        </Link>
 
+      </div>
     </nav>
   );
 }

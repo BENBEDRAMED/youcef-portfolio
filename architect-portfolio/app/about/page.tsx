@@ -1,8 +1,10 @@
 "use client";
 
-import { motion , type Variants} from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import { FaWhatsapp, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import Image from "next/image";
+
 /* 🎯 ANIMATIONS */
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -11,15 +13,15 @@ const fadeUp: Variants = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.25, 0.1, 0.25, 1] as const, // ✅ IMPORTANT
+      ease: [0.25, 0.1, 0.25, 1] as const,
     },
   },
 };
 
-const stagger = {
+const stagger: Variants = {
   show: {
     transition: {
-      staggerChildren: 0.15,
+      staggerChildren: 0.12,
     },
   },
 };
@@ -29,10 +31,15 @@ export default function AboutPage() {
     <main className="relative min-h-screen text-white">
 
       {/* 🔥 BACKGROUND */}
-      <div
-        className="fixed inset-0 -z-10 bg-cover bg-center"
-        style={{ backgroundImage: "url('/about1.png')" }}
-      />
+      <div className="fixed inset-0 -z-10">
+        <Image
+          src="/about1.png"
+          alt="background"
+          fill
+          priority
+          className="object-cover"
+        />
+      </div>
 
       {/* 🌑 OVERLAY */}
       <div className="fixed inset-0 -z-10 bg-black/60" />
@@ -40,7 +47,7 @@ export default function AboutPage() {
       {/* NAVBAR */}
       <Navbar />
 
-      {/* MAIN CONTAINER */}
+      {/* MAIN */}
       <div className="pt-32 px-10 md:px-20 max-w-7xl mx-auto">
 
         {/* 🔷 TOP BLOCK */}
@@ -51,18 +58,18 @@ export default function AboutPage() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
+            whileHover={{ scale: 1.05 }}
             className="relative w-40 h-40"
           >
             {/* GLASS */}
-            <div className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md border border-white/20"></div>
+            <div className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md border border-white/20" />
 
             {/* IMAGE */}
-            <motion.img
+            <Image
               src="/fz.jpg"
               alt="profile"
-              whileHover={{ scale: 1.03 }}
-              transition={{ duration: 0.3 }}
-              className="relative w-full h-full object-cover rounded-full shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+              fill
+              className="object-cover rounded-full shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
             />
           </motion.div>
 
@@ -94,7 +101,6 @@ export default function AboutPage() {
               Bridging architectural design with planning, control, and execution.
             </motion.p>
           </motion.div>
-
         </div>
 
         {/* 🧠 ABOUT */}
@@ -102,7 +108,7 @@ export default function AboutPage() {
           variants={fadeUp}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "-80px" }}
           className="mt-24 grid md:grid-cols-2 gap-16"
         >
           <div>
@@ -133,7 +139,7 @@ export default function AboutPage() {
           variants={fadeUp}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           className="mt-24 grid md:grid-cols-2 gap-16"
         >
           <div>
@@ -146,12 +152,23 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-6 text-white/70">
-            <p>Project Planning</p>
-            <p>Construction Scheduling</p>
-            <p>Architectural Design</p>
-            <p>Technical Drawings</p>
-            <p>Cost Analysis</p>
-            <p>Project Monitoring</p>
+            {[
+              "Project Planning",
+              "Construction Scheduling",
+              "Architectural Design",
+              "Technical Drawings",
+              "Cost Analysis",
+              "Project Monitoring",
+            ].map((item, i) => (
+              <motion.p
+                key={i}
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.2 }}
+                className="cursor-default"
+              >
+                {item}
+              </motion.p>
+            ))}
           </div>
         </motion.div>
 
@@ -160,7 +177,7 @@ export default function AboutPage() {
           variants={fadeUp}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           className="mt-24 grid md:grid-cols-2 gap-16"
         >
           <div>
@@ -173,20 +190,16 @@ export default function AboutPage() {
           </div>
 
           <div className="space-y-6 text-white/70">
-            <div>
-              <p className="text-white">2025 — Today</p>
-              <p>Project Planner — Cosider (In Salah)</p>
-            </div>
-
-            <div>
-              <p className="text-white">2024 — 2025</p>
-              <p>Planning Intern — Cosider (Tizi-Ouzou)</p>
-            </div>
-
-            <div>
-              <p className="text-white">2023 — 2024</p>
-              <p>Architect — Relizane</p>
-            </div>
+            {[
+              ["2025 — Today", "Project Planner — Cosider (In Salah)"],
+              ["2024 — 2025", "Planning Intern — Cosider (Tizi-Ouzou)"],
+              ["2023 — 2024", "Architect — Relizane"],
+            ].map(([date, role], i) => (
+              <motion.div key={i} whileHover={{ x: 5 }}>
+                <p className="text-white">{date}</p>
+                <p>{role}</p>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
 
@@ -195,7 +208,7 @@ export default function AboutPage() {
           variants={fadeUp}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           className="mt-24 mb-20 grid md:grid-cols-2 gap-16"
           id="contact"
         >
@@ -210,42 +223,44 @@ export default function AboutPage() {
 
           <div className="text-white/80 space-y-6">
 
-  {/* EMAIL */}
-  <a
-    href="mailto:youcefsassidz@gmail.com"
-    className="flex items-center gap-4 group"
-  >
-    <FaEnvelope className="text-white/60 group-hover:text-white transition" />
-    <span className="group-hover:translate-x-1 transition">
-      youcefsassidz@gmail.com
-    </span>
-  </a>
+            {/* EMAIL */}
+            <a
+              href="mailto:youcefsassidz@gmail.com"
+              className="flex items-center gap-4 group"
+            >
+              <FaEnvelope className="text-white/60 group-hover:text-white transition" />
+              <span className="group-hover:translate-x-1 transition">
+                youcefsassidz@gmail.com
+              </span>
+            </a>
 
-  {/* WHATSAPP */}
-  <a
-    href="https://wa.me/213676846386"
-    target="_blank"
-    className="flex items-center gap-4 group"
-  >
-    <FaWhatsapp className="text-white/60 group-hover:text-white transition" />
-    <span className="group-hover:translate-x-1 transition">
-      +213 676 846 386
-    </span>
-  </a>
+            {/* WHATSAPP */}
+            <a
+              href="https://wa.me/213676846386"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 group"
+            >
+              <FaWhatsapp className="text-white/60 group-hover:text-white transition" />
+              <span className="group-hover:translate-x-1 transition">
+                +213 676 846 386
+              </span>
+            </a>
 
-  {/* LINKEDIN */}
-  <a
-    href="https://www.linkedin.com/in/youcef-sassi-ab041127a?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-    target="_blank"
-    className="flex items-center gap-4 group"
-  >
-    <FaLinkedin className="text-white/60 group-hover:text-white transition" />
-    <span className="group-hover:translate-x-1 transition">
-      Youcef Sassi
-    </span>
-  </a>
+            {/* LINKEDIN */}
+            <a
+              href="https://www.linkedin.com/in/youcef-sassi-ab041127a"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 group"
+            >
+              <FaLinkedin className="text-white/60 group-hover:text-white transition" />
+              <span className="group-hover:translate-x-1 transition">
+                Youcef Sassi
+              </span>
+            </a>
 
-</div>
+          </div>
         </motion.div>
 
       </div>

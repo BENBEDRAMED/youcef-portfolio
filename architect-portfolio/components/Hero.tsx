@@ -1,14 +1,26 @@
 "use client";
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import Image from "next/image";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 
 export default function Hero() {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  // Use fixed range (safe for React)
-  const moveX = useTransform(x, [0, 1000], [-15, 15]);
-  const moveY = useTransform(y, [0, 1000], [-15, 15]);
+  // Smooth mouse coordinates
+  const smoothX = useSpring(x, { stiffness: 80, damping: 25 });
+  const smoothY = useSpring(y, { stiffness: 80, damping: 25 });
+
+  // Normalized transforms (handles any screen size dynamically via window bounds)
+  const bgX = useTransform(smoothX, [0, 1920], [-20, 20]);
+  const bgY = useTransform(smoothY, [0, 1080], [-20, 20]);
+
+  // Derive linked layers directly (pure GPU transforms, zero React re-renders)
+  const gridX = useTransform(bgX, (val) => val * 0.5);
+  const gridY = useTransform(bgY, (val) => val * 0.5);
+
+  const contentX = useTransform(bgX, (val) => val * -0.2);
+  const contentY = useTransform(bgY, (val) => val * -0.2);
 
   return (
     <section
@@ -18,29 +30,39 @@ export default function Hero() {
         y.set(e.clientY);
       }}
     >
-      {/* 🔥 PARALLAX BACKGROUND */}
+      {/* BACKGROUND IMAGE - Next.js optimized with priority loading */}
       <motion.div
-        style={{
-          x: moveX,
-          y: moveY,
-          backgroundImage: "url('/overlay2.jpg')",
-        }}
-        className="absolute inset-0 bg-cover bg-center scale-110"
+        style={{ x: bgX, y: bgY }}
+        className="absolute inset-0 w-full h-full scale-110"
+      >
+        <Image
+          src="/overlay2.jpg"
+          alt="Hero Background"
+          fill
+          priority
+          quality={75}
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </motion.div>
+
+      {/* GRID */}
+      <motion.div
+        style={{ x: gridX, y: gridY }}
+        className="absolute inset-0 z-10 pointer-events-none
+          bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]
+          bg-[size:60px_60px]"
       />
-        {/* 🔲 GRID LINES */}
-<div className="absolute inset-0 z-10 pointer-events-none
-  bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),
-      linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]
-  bg-[size:60px_60px]">
-</div>
-      {/* 🌑 OVERLAY */}
-      <div className="absolute inset-0 bg-black/50"></div>
+
+      {/* OVERLAY */}
+      <div className="absolute inset-0 bg-black/50 z-10" />
 
       {/* CONTENT */}
-      <div className="relative z-20 w-full h-full flex items-center px-10 md:px-20">
+      <motion.div
+        style={{ x: contentX, y: contentY }}
+        className="relative z-20 w-full h-full flex items-center px-10 md:px-20"
+      >
         <div className="max-w-xl text-white">
-
-          {/* ROLE */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -50,7 +72,6 @@ export default function Hero() {
             Architect Engineer
           </motion.p>
 
-          {/* NAME */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -61,7 +82,6 @@ export default function Hero() {
             <span className="text-white/70">MERINE SASSI</span>
           </motion.h1>
 
-          {/* DIVIDER */}
           <motion.div
             initial={{ opacity: 0, scaleX: 0 }}
             animate={{ opacity: 1, scaleX: 1 }}
@@ -69,7 +89,6 @@ export default function Hero() {
             className="mt-8 w-16 h-[1px] bg-white/40 origin-left"
           />
 
-          {/* DESCRIPTION */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -79,9 +98,8 @@ export default function Hero() {
             Designing spaces where structure meets emotion, combining modern
             architecture with precision and clarity.
           </motion.p>
-
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

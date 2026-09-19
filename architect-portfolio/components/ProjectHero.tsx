@@ -39,8 +39,9 @@ export default function ProjectHero({ title, type, year, cover }: Props) {
           alt={title}
           fill
           priority
+          fetchPriority="high"
           sizes="100vw"
-          quality={80}
+          quality={70}
           className="object-cover object-center"
         />
       </motion.div>

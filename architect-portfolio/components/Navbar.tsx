@@ -23,7 +23,7 @@ export default function Navbar() {
           <div className="absolute inset-0 rounded-full bg-white/10 blur-md opacity-0 transition duration-500 group-hover:opacity-100"></div>
 
           <Image
-            src="/logo2.png"
+            src="/logo2.avif"
             alt="logo"
             width={64}
             height={64}
@@ -72,7 +72,7 @@ export default function Navbar() {
         {/* 🔷 CTA (CONTACT → SCROLL) */}
         <Link
           href="/about#contact"
-          className="relative px-6 py-2 border border-white text-sm tracking-widest uppercase overflow-hidden group"
+          className="relative px-6 py-2 border border-white text-sm tracking-widest uppercase overflow-hidden group hidden md:block"
         >
           {/* text */}
           <span className="relative z-10">Contact</span>

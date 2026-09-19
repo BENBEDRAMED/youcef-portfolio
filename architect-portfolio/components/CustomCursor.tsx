@@ -1,85 +1,107 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import Image from "next/image";
 
 export default function CustomCursor() {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  // 🔥 smooth follow (spring physics)
-  const smoothX = useSpring(x, { stiffness: 300, damping: 25 });
-  const smoothY = useSpring(y, { stiffness: 300, damping: 25 });
-
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [mounted, setMounted] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const lightRef = useRef<HTMLDivElement>(null);
+
+  // Smooth cursor motion values (zero React re-renders)
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+
+  const smoothX = useSpring(cursorX, { stiffness: 400, damping: 28 });
+  const smoothY = useSpring(cursorY, { stiffness: 400, damping: 28 });
 
   useEffect(() => {
+    setMounted(true);
+
     const move = (e: PointerEvent) => {
-      x.set(e.clientX - 16);
-      y.set(e.clientY - 16);
-      setMouse({ x: e.clientX, y: e.clientY });
+      // Offset by half of cursor size (32px / 2 = 16px)
+      cursorX.set(e.clientX - 16);
+      cursorY.set(e.clientY - 16);
+
+      // Move radial light directly via CSS variables without re-rendering React
+      if (lightRef.current) {
+        lightRef.current.style.setProperty("--mouse-x", `${e.clientX}px`);
+        lightRef.current.style.setProperty("--mouse-y", `${e.clientY}px`);
+      }
     };
 
     const hoverCheck = (e: PointerEvent) => {
-      const target = e.target as HTMLElement;
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
 
       const isInteractive = target.closest(
-        "a, button, input, textarea, [role='button'], .cursor-pointer, img, [data-cursor]"
+        "a, button, input, textarea, [role='button'], .cursor-pointer, [data-cursor]"
       );
 
       setIsHovering(!!isInteractive);
     };
 
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerover", hoverCheck);
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerover", hoverCheck, { passive: true });
 
     return () => {
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerover", hoverCheck);
     };
-  }, [x, y]);
+  }, [cursorX, cursorY]);
+
+  // Prevent SSR hydration mismatch and hide on touch devices
+  if (!mounted) return null;
 
   return (
     <>
-      {/* ✨ LIGHT FOLLOW */}
+      {/* 💡 LIGHT SPOTLIGHT FOLLOW (Smooth & Zero Re-render) */}
       <div
-        className="fixed inset-0 pointer-events-none z-[5]"
-        style={{
-          background: `radial-gradient(
-            600px circle at ${mouse.x}px ${mouse.y}px,
-            rgba(255,255,255,0.05),
-            transparent 60%
-          )`,
-        }}
+        ref={lightRef}
+        style={
+          {
+            "--mouse-x": "-1000px",
+            "--mouse-y": "-1000px",
+            background:
+              "radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 60%)",
+          } as React.CSSProperties
+        }
+        className="fixed inset-0 pointer-events-none z-[5] hidden md:block"
       />
 
       {/* 🖱 CUSTOM CURSOR */}
       <motion.div
         style={{ x: smoothX, y: smoothY }}
-        className="fixed top-0 left-0 pointer-events-none z-[999]"
+        className="fixed top-0 left-0 pointer-events-none z-[999] hidden md:block"
       >
-        {/* 🔵 HOVER GLASS */}
+        {/* 🔵 HOVER GLASS AURA */}
         <motion.div
           animate={{
-            scale: isHovering ? 1.8 : 0,
-            opacity: isHovering ? 1 : 0,
-          }}
-          transition={{ duration: 0.25 }}
-          className="absolute w-10 h-10 -translate-x-1/2 -translate-y-1/2 rounded-full 
-                     bg-white/10 backdrop-blur-md border border-white/20"
-        />
-
-        {/* 🖱 CURSOR IMAGE */}
-        <motion.img
-          src="/cursor.png"
-          alt="cursor"
-          animate={{
-            scale: isHovering ? 1.2 : 1,
+            scale: isHovering ? 1.6 : 0.8,
+            opacity: isHovering ? 0.35 : 0,
           }}
           transition={{ duration: 0.2 }}
-          className="relative w-8 h-8 object-contain"
+          className="absolute inset-0 w-8 h-8 rounded-full bg-white/20 blur-sm -z-10"
         />
+
+        {/* 🖱 CURSOR GRAPHIC */}
+        <motion.div
+          animate={{
+            scale: isHovering ? 1.15 : 1,
+          }}
+          transition={{ duration: 0.2 }}
+          className="relative w-8 h-8"
+        >
+          <Image
+            src="/cursor.avif"
+            alt="Cursor pointer"
+            width={32}
+            height={32}
+            priority
+            className="w-full h-full object-contain select-none"
+          />
+        </motion.div>
       </motion.div>
     </>
   );

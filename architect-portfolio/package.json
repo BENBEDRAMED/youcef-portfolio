@@ -2,6 +2,10 @@
   "name": "architect-portfolio",
   "version": "0.1.0",
   "private": true,
+  "browserslist": [
+    "defaults and fully supports es6-module",
+    "not dead"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

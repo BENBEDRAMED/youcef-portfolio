@@ -30,7 +30,7 @@ export default function ProjectsPageHero() {
         className="fixed inset-0 -z-10 w-full h-full scale-110 pointer-events-none"
       >
         <Image
-          src="/meusum.png"
+          src="/meusum.jfif"
           alt="Projects Background"
           fill
           priority

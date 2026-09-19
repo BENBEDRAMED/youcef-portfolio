@@ -25,8 +25,8 @@ export const projects = [
     title: "Atlas Modern Villa",
     type: "Residential",
     year: "2023",
-    cover: "/p22.jpg",
-    images: ["/p22.jpg"],
+    cover: "/p22.avif",
+    images: ["/p22.avif"],
     description: "A cultural hub designed to connect community and space.", // ✅ ADD THIS
   },
   {
@@ -34,8 +34,8 @@ export const projects = [
     title: "Urban Core Tower",
     type: "Commercial",
     year: "2024",
-    cover: "/p33.jpg",
-    images: ["/p33.jpg"],
+    cover: "/p33.avif",
+    images: ["/p33.avif"],
     description: "A cultural hub designed to connect community and space.", // ✅ ADD THIS
   },
   {
@@ -44,16 +44,16 @@ export const projects = [
     title: "Desert Light Museum",
     type: "Cultural",
     year: "2023",
-    cover: "/p44.jpg",
-    images: ["/p44.jpg"],
+    cover: "/p44.avif",
+    images: ["/p44.avif"],
   },
   {
     slug: "coastal-research-center",
     title: "Coastal Research Center",
     type: "Institutional",
     year: "2022",
-    cover: "/p55.jpg",
-    images: ["/p55.jpg"],
+    cover: "/p55.avif",
+    images: ["/p55.avif"],
     description: "A cultural hub designed to connect community and space.", // ✅ ADD THIS
   },
   {

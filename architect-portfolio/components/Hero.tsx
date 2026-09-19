@@ -36,10 +36,11 @@ export default function Hero() {
         className="absolute inset-0 w-full h-full scale-110"
       >
         <Image
-          src="/overlay2.jpg"
+          src="/overlay2.avif"
           alt="Hero Background"
           fill
           priority
+          fetchPriority="high"
           quality={75}
           sizes="100vw"
           className="object-cover object-center"
